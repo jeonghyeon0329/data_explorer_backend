@@ -1,43 +1,21 @@
-# --- Secrets / Env ---
-**/.env
-*.env
-.envrc
-.python-version
+# 업로드 & 로그 폴더 무시
+/uploads/*
+/logs/*
 
-# --- Python / Django ---
+# 데이터 파일 무시
+*.pdf
+*.xlsx
+*.csv
+
+# Python bytecode
 __pycache__/
-*.py[cod]
 *.pyc
 *.pyo
 *.pyd
-*.egg-info/
-.dist-info/
-build/
-dist/
-.coverage
-coverage.xml
-htmlcov/
-.pytest_cache/
-.mypy_cache/
-.ruff_cache/
-db.sqlite3
 
-# --- Virtualenv ---
+# Python 가상환경 무시
 venv/
+.env/
 .venv/
-
-# --- Editors / OS ---
-.DS_Store
-.idea/
-.vscode/
-
-# --- Logs ---
-*.log
-logs/
-gunicorn*.log
-
-# --- Docker ---
-docker-data/
-
-####
-notepad.py
+fastapi_venv/
+CLAUDE.md
