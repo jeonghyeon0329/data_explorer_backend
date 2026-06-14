@@ -18,4 +18,3 @@ venv/
 .env/
 .venv/
 fastapi_venv/
-CLAUDE.md

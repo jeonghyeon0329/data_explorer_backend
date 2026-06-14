@@ -10,23 +10,23 @@ BASE_URL = "http://localhost:9000"
             "ok",
             {
                 "user_id": "test",
-                "affiliation": "test",
+                "test": "test",
             },
-            200,
+            202,
         )
     ],
 )
 def test(name, payload, expected_status):
     url = f"{BASE_URL}/items/~test"
-    resp = requests.post(url, data=payload, timeout=10)
+    resp = requests.post(url, json=payload, timeout=10)
 
-    if expected_status == 200:
+    if expected_status == 202:
         body = resp.json()
-        assert "operation_id" in body.get('detail')
-        assert "result" in body.get('detail')
-        assert "spending_time(s)" in body.get('detail')
-        
+        assert resp.status_code == 202
+        assert "operation_id" in body
+        assert body.get("error_code") == "A001"
 
     elif expected_status == 500:
         body = resp.json()
-        assert "detail" in body.get('detail')
+        assert resp.status_code == 500
+        assert "error_code" in body

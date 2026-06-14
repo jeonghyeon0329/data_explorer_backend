@@ -4,8 +4,8 @@ from typing import Callable
 from app.utils import build_api_response
 
 # 허용된 IP 및 URL prefix 설정
-ALLOWED_IPS = {"127.0.0.1", "localhost", "testclient"}
-ALLOWED_PREFIXES = {"/items"}
+ALLOWED_IPS = {"127.0.0.1", "::1", "localhost", "testclient"}
+ALLOWED_PREFIXES = {"/items", "/accounts", "/datasets", "/admin"}
 
 
 async def connection_context(request: Request, call_next: Callable[[Request], Response]) -> Response:

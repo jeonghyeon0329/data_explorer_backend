@@ -1,10 +1,10 @@
 from app.utils import *
 
 class _testProcessor:
-    def __init__(self, task_info, operate_parameter):
-        self.task_info = task_info
+    def __init__(self, file_manager, operate_parameter):
+        self.file_manager = file_manager
         self.operate_parameter = operate_parameter
-        for key, value in task_info.__dict__.items():
+        for key, value in file_manager.__dict__.items():
             setattr(self, key, value)
         self.condition = self.condition()
 

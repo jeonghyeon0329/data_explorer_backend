@@ -26,7 +26,7 @@ async def operate_run(operate_parameter, payload, file=None):
     try:
         file_manager = FileManager(
             payload.get("user_id"),
-            payload.get("test")  # affiliation 대신 test 필드 사용
+            payload.get("test"),
         )
         if file:
             await file_manager.save_file_to_dataset(file)

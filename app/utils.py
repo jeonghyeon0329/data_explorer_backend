@@ -8,7 +8,6 @@ import tempfile
 import itertools
 import threading
 import pypdfium2 as pdfium
-import asyncio
 import io, os, glob, time
 
 
@@ -19,11 +18,7 @@ def raise_http(status: int, code: str, message: str, errors: Optional[Union[str,
     """HTTPException 포맷 통일"""
     raise HTTPException(
         status_code=status,
-        detail={
-            "error_code": code,
-            "message": message,
-            "errors": errors or "",
-        },
+        detail=build_api_response(status, code, message, errors=errors),
     )
 
 
@@ -123,14 +118,6 @@ class FileManager:
 
         raise_http(422, "C001", "Unsupported file payload")
 
-    async def _write_file_to_disk(self, file: UploadFile, chunk_size: int) -> None:
-        def write_chunks(path, upload_file):
-            with open(path, "wb") as buffer:
-                while chunk := upload_file.file.read(chunk_size):
-                    buffer.write(chunk)
-
-        await asyncio.to_thread(write_chunks, self.full_path, file)
-
     # ------------------------------------------------------------------
     # 정적 메서드 (파일 유효성 검사)
     # ------------------------------------------------------------------
@@ -180,27 +167,6 @@ class FileUtils:
             for file_path in glob.glob(os.path.join(dir_path, pattern)):
                 if os.path.exists(file_path):
                     os.remove(file_path)
-
-    @staticmethod
-    def extract_files_by_count(files: List[UploadFile], expected_count: int):
-        """업로드된 파일 개수 검사"""
-        if len(files) != expected_count:
-            raise_http(400, "F001", "Wrong file count")
-
-        filenames = [file.filename for file in files]
-        if len(filenames) != len(set(filenames)):
-            raise_http(400, "F002", "Duplicate file names")
-        return files[0] if expected_count == 1 else tuple(files)
-
-    @staticmethod
-    def validate_file_extensions(files, allowed_extensions):
-        """파일 확장자 유효성 검사"""
-        allowed = [allowed_extensions] if isinstance(allowed_extensions, str) else allowed_extensions
-        files = files if isinstance(files, list) else [files]
-
-        for file in files:
-            if not any(file.filename.lower().endswith(ext.lower()) for ext in allowed):
-                raise_http(400, "F003", "Unexpected file format")
 
     @staticmethod
     def convert_images_to_pdf(files):
