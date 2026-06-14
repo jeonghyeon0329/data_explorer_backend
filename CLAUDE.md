@@ -116,6 +116,26 @@ data_explorer_backend/
 3. `app/routers/` 에 라우터 추가
 4. `main.py` 에서 라우터 `include_router()` 등록
 
+## 데이터셋 필터 연산자
+
+`app/services/dataset_service.py`의 `VALID_OPS`에 정의된 행 필터링 연산자. API 요청 시 `filter` 파라미터에 JSON으로 전달한다.
+
+```json
+[{ "col": "age", "op": "gt", "val": "30" }]
+```
+
+| 코드 | 의미 | 대상 타입 |
+|------|------|-----------|
+| `eq` | 같음 (=) | 문자열 / 숫자 |
+| `ne` | 다름 (≠) | 문자열 / 숫자 |
+| `contains` | 포함 (대소문자 무시) | 문자열 |
+| `gt` | 초과 (>) | 숫자 |
+| `lt` | 미만 (<) | 숫자 |
+| `gte` | 이상 (≥) | 숫자 |
+| `lte` | 이하 (≤) | 숫자 |
+
+프론트엔드(`DatasetDetailPage.js`)에서는 API 코드를 그대로 전송하되, `OPS` 배열의 `label` 필드로 사용자에게 한글로 표시한다.
+
 ## 유틸리티
 
 - `build_api_response()` / `make_json_response()` — 표준 응답 생성
